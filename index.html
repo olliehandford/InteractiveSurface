@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Interactive Surface</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <canvas id="canvas" width="1024" height="786" style="border:1px solid #000000;"></canvas>
+    <script>
+        $(function () {
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+
+            // set background colour
+            context.fillStyle = '#dee2e6';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            // title font
+            context.font = '20px Arial';
+            context.fillStyle = 'black';
+            context.fillText('Circle Click', 10, 25);
+
+            // subtitle font
+            context.font = '11px Arial';
+            context.fillText(
+                'Click anywhere on the canvas. The size and colour of the circle will change on how long you press.',
+                10, 50);
+            context.fillText('Oliver Handford - 364215', 10, 65);
+
+            var start;
+
+            // start counting to get duration of press
+            $("#canvas").on('mousedown', function (e) {
+                start = new Date().getTime();
+            });
+
+            // reset press duration
+            $("#canvas").on('mouseleave', function (e) {
+                start = 0;
+            });
+
+            // when the mouse has left
+            $("#canvas").on('mouseup', function (e) {
+
+                var currentTime = new Date().getTime();
+                var duration = currentTime - start; // get duration of press
+
+                var radius = duration / 4; // make duration suitable size for radius
+
+                // get mouse x and y
+                mouseX = e.pageX - $("#canvas").offset().left;
+                mouseY = e.pageY - $("#canvas").offset().top;
+
+                // draw circle
+                context.beginPath();
+                context.arc(mouseX, mouseY, radius, 0, 2 * Math.PI);
+                context.fillStyle = 'hsl(' + radius + ', 100%, 50%)';
+                context.fill();
+
+            })
+        });
+    </script>
+</body>
+
+</html>
